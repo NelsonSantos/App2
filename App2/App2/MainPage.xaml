@@ -1,0 +1,70 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:App2"
+             xmlns:iOS="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+             x:Class="App2.MainPage"
+             iOS:Page.UseSafeArea="True"
+             Title="Main Page"
+             >
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <DataTemplate x:Key="LinkDataTemplate">
+                <Frame HasShadow="False" BorderColor="Gray" CornerRadius="5" Padding="30" >
+                    <Label BackgroundColor="LightGray">
+                        <Label.FormattedText>
+                            <FormattedString>
+                                <Span Text="{Binding Description}" />
+                                <Span Text="&#x0a;&#x0a;" />
+                                <Span Text="{Binding Link}" TextColor="Blue" TextDecorations="Underline">
+                                    <Span.GestureRecognizers>
+                                        <TapGestureRecognizer 
+                                            Command="{Binding GoLinkCommand}"
+                                            CommandParameter="{Binding Link}"
+                                        />
+                                    </Span.GestureRecognizers>
+                                </Span>
+                            </FormattedString>
+                        </Label.FormattedText>
+                    </Label>
+                </Frame>
+            </DataTemplate>
+            
+            <DataTemplate x:Key="NoLinkDataTemplate">
+                <Frame HasShadow="False" BorderColor="Gray" CornerRadius="5" Padding="30">
+                    <Label BackgroundColor="LightGray" Padding="30">
+                        <Label.FormattedText>
+                            <FormattedString>
+                                <Span Text="{Binding Description}" />
+                            </FormattedString>
+                        </Label.FormattedText>
+                    </Label>
+                </Frame>
+            </DataTemplate>
+            
+            <local:LabelDataTemplate x:Key="LabelDataTemplate"
+                NoLinkDataTemplate="{StaticResource NoLinkDataTemplate}"
+                LinkDataTemplate="{StaticResource LinkDataTemplate}"
+                >
+            </local:LabelDataTemplate>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <ContentPage.BindingContext>
+        <local:MainViewModel />
+    </ContentPage.BindingContext>
+    <StackLayout>
+        <local:CustomCollectionView
+            SelectionMode="Single"
+            Margin="10"
+            ItemsSource="{Binding Items}"
+            ItemTemplate="{StaticResource LabelDataTemplate}"
+            ItemTappedCommand="{Binding GoToPageCommand}"
+            >
+            <CollectionView.ItemsLayout>
+                <LinearItemsLayout Orientation="Vertical" ItemSpacing="10" />
+            </CollectionView.ItemsLayout>
+        </local:CustomCollectionView>
+    </StackLayout>
+
+</ContentPage>
